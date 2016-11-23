@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/radio_group" />
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="2dp"
+        android:background="#ffffff"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/home_lin"
+            style="@style/bottom_tab_style"
+            android:drawableTop="@drawable/radio_btn_home"
+            android:text="消息"
+            android:textColor="@drawable/radiogru_text_color" />
+
+        <RadioButton
+            android:id="@+id/project_lin"
+            style="@style/bottom_tab_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/radio_btn_power_plant"
+            android:text="电站"
+            android:textColor="@drawable/radiogru_text_color" />
+
+        <RadioButton
+            android:id="@+id/powerstation_lin"
+            style="@style/bottom_tab_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/radio_btn_project"
+
+            android:text="应用"
+            android:textColor="@drawable/radiogru_text_color" />
+
+        <RadioButton
+            android:id="@+id/my_lin"
+            style="@style/bottom_tab_style"
+            android:drawableTop="@drawable/radio_btn_mine"
+            android:text="我的"
+            android:textColor="@drawable/radiogru_text_color" />
+    </RadioGroup>
+</RelativeLayout>

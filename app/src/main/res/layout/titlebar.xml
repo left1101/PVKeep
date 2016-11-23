@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="40dp">
+
+    <TextView
+        android:id="@+id/tex_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="首页"
+        android:textColor="@color/head_color"
+        android:textSize="@dimen/title_size" />
+
+    <ImageButton
+        android:id="@+id/ibt_back"
+        style="@style/style_info_back"
+        android:src="@mipmap/legal_information_btn_return"
+        android:visibility="gone"/>
+
+    <ImageButton
+        android:id="@+id/ibt_search"
+        style="@style/style_info_search"
+        android:src="@mipmap/legal_information_btn_search_for"
+        android:visibility="gone"/>
+
+</RelativeLayout>
