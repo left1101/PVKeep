@@ -27,4 +27,9 @@ public class WelcomeActivity extends Activity {
 
         mViewPager.setAdapter(new WelcomeAdapter(this, images));
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
