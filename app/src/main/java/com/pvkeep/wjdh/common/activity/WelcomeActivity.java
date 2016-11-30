@@ -25,8 +25,6 @@ public class WelcomeActivity extends Activity {
         images[1] = R.mipmap.welcom_icon2;
         images[2] = R.mipmap.welcom_icon3;
 
-
-
         mViewPager.setAdapter(new WelcomeAdapter(this, images));
     }
 

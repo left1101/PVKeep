@@ -42,7 +42,7 @@ public abstract class BaseActivity extends Activity {
         setContentView(getContentViewId());
         ButterKnife.bind(this);
         mActivity = this;
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(BaseActivity.this);
         initAllMembersView(savedInstanceState);
     }
 
@@ -62,7 +62,7 @@ public abstract class BaseActivity extends Activity {
     protected void onDestroy() {
         callCancel();
         onUnsubscribe();
-        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(BaseActivity.this);
         ButterKnife.unbind(this);
         super.onDestroy();
     }
@@ -84,7 +84,6 @@ public abstract class BaseActivity extends Activity {
             calls.clear();
         }
     }
-
 
     public void addSubscription(Observable observable, Subscriber subscriber) {
         if (mCompositeSubscription == null) {

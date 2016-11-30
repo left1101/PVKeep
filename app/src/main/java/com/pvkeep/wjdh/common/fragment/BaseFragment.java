@@ -32,7 +32,7 @@ public abstract class BaseFragment extends Fragment {
         mRootView = inflater.inflate(getContentViewId(), container, false);
         ButterKnife.bind(this, mRootView);
         this.context = getActivity();
-        //EventBus.getDefault().register(context);
+        EventBus.getDefault().register(BaseFragment.this);
         initAllMembersView(savedInstanceState);
         return mRootView;
     }
@@ -63,7 +63,7 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         onUnsubscribe();
-        //EventBus.getDefault().unregister(context);
+        EventBus.getDefault().unregister(BaseFragment.this);
     }
 
     public void onUnsubscribe() {

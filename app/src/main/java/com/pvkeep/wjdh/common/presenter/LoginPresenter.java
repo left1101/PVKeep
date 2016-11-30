@@ -1,43 +1,54 @@
 package com.pvkeep.wjdh.common.presenter;
 
+import com.pvkeep.wjdh.common.Impl.LoadDataListener;
+import com.pvkeep.wjdh.common.Model.LoginModel;
+import com.pvkeep.wjdh.common.View.LoginView;
 import com.pvkeep.wjdh.common.entity.UserVo;
-import com.pvkeep.wjdh.common.impl.LoginImpl;
 import com.pvkeep.wjdh.retrofit.ApiCallback;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Admin on 2016/10/17.
  */
-public class LoginPresenter extends BasePresenter<LoginImpl> {
+public class LoginPresenter extends BasePresenter<LoginView> implements LoadDataListener<UserVo> {
 
-    public LoginPresenter(LoginImpl impl){
-        attachView(impl);
+    private LoginModel model;
+
+    public LoginPresenter(LoginView view){
+        attachView(view);
+        model = new LoginModel(this);
+        model.attath(this);
     }
 
     public void login(){
-        mvpView.showLoading();
-        addSubscription(apiStores.login(mvpView.getUserVo()), new ApiCallback<UserVo>(){
-
-            @Override
-            public void onSuccess(UserVo model) {
-                mvpView.getDataSuccess(model);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                mvpView.getDataFail(msg);
-            }
-
-            @Override
-            public void onFinish() {
-                mvpView.hideLoading();
-            }
-        });
+        Map<String, String> info = mvpView.getUserVo();
+        model.login(info);
     }
 
     public void logout(){
 
+    }
+
+    @Override
+    public void onLoadStartedListener() {
+        mvpView.showLoading();
+    }
+
+    @Override
+    public void onLoadNullListener() {
+        mvpView.hideLoading();
+    }
+
+    @Override
+    public void onLoadErrorListener(String result) {
+        mvpView.hideLoading();
+        mvpView.getDataFail(result);
+    }
+
+    @Override
+    public void onLoadCompletedListener(UserVo result) {
+        mvpView.hideLoading();
+        mvpView.getDataSuccess(result);
     }
 }

@@ -2,15 +2,14 @@ package com.pvkeep.wjdh.common.activity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.pvkeep.wjdh.activity.R;
+import com.pvkeep.wjdh.common.View.LoginView;
 import com.pvkeep.wjdh.common.entity.UserVo;
-import com.pvkeep.wjdh.common.impl.LoginImpl;
 import com.pvkeep.wjdh.common.presenter.LoginPresenter;
+import com.pvkeep.wjdh.mine.entity.User;
 import com.pvkeep.wjdh.network.HttpResult;
-import com.pvkeep.wjdh.network.HttpResultSubscriber;
 import com.pvkeep.wjdh.network.NetFactory;
 import com.pvkeep.wjdh.network.NetService;
 import com.pvkeep.wjdh.network.TransformUtils;
@@ -25,7 +24,7 @@ import rx.Subscriber;
 /**
  * Created by Admin on 2016/10/15.
  */
-public class LoginActivity extends MvpActivity<LoginPresenter> implements LoginImpl {
+public class LoginActivity extends MvpActivity<LoginPresenter> implements LoginView {
 
     @Bind(R.id.textview)
     TextView tv;
@@ -38,7 +37,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements LoginI
 
     @Override
     protected void initAllMembersView(Bundle savedInstanceState) {
-
+        mvpPresenter.attachView(this);
     }
 
     @OnClick(R.id.button)
@@ -52,8 +51,9 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements LoginI
     }
 
     @Override
-    public void getDataSuccess(UserVo User) {
-        tv.setText(User.toString());
+    public void getDataSuccess(UserVo result) {
+        tv.setText(result.toString());
+        toastShow("登录成功");
     }
 
     @Override
@@ -68,8 +68,8 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements LoginI
     }
 
     @Override
-    public void getDataFail(String msg) {
-        toastShow("有问题");
+    public void getDataFail(String result) {
+        toastShow("有问题:" + result);
     }
 
     @Override
@@ -82,25 +82,4 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements LoginI
         dismissProgressDialog();
     }
 
-    private void login(){
-        Map<String, String> map = new HashMap<>();
-        NetService service = NetFactory.getInstance().createService(NetService.class);
-        service.login(map).compose(TransformUtils.<UserVo>defaultSchedulers())
-                .subscribe(new Subscriber<UserVo>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(UserVo userVo) {
-
-                    }
-                });
-    }
 }
