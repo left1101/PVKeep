@@ -2,111 +2,154 @@ package com.pvkeep.wjdh.common.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pvkeep.wjdh.retrofit.ApiStores;
-import com.pvkeep.wjdh.retrofit.AppClient;
+import com.pvkeep.wjdh.activity.R;
 import com.pvkeep.wjdh.utils.tools.Mlog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Xiexr
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends AppCompatActivity {
+
+    public static final int MODE_NONE = 0;
+    public static final int MODE_BACK = 1;
+    public static final int MODE_ADD = 2;
+    public static final int MODE_BACK_ADD = 3;
+    public static final int MODE_HOME = 4;
+
+    protected TextView texTitle;
+    protected ImageButton iBtnBack;
+    protected ImageView iBtnAdd;
+    protected Intent intent;
 
     public Activity mActivity;
-    public ApiStores apiStores = AppClient.retrofit().create(ApiStores.class);
-    private CompositeSubscription mCompositeSubscription;
-    private List<Call> calls;
+
     public ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getContentViewId());
+        setUpContentView();
         ButterKnife.bind(this);
         mActivity = this;
+        intent = getIntent();
         EventBus.getDefault().register(BaseActivity.this);
-        initAllMembersView(savedInstanceState);
+        setUpView();
+        setUpData(savedInstanceState);
+    }
+
+    public void setContentView(int layoutResID) {
+        setContentView(layoutResID, -1, -1, MODE_BACK);
+    }
+
+    public void setContentView(int layoutResID, int titleID) {
+        setContentView(layoutResID, titleID, -1, MODE_BACK);
+    }
+
+    public void setContentView(int layoutResID, int titleID, int mode, int btnID) {
+        setContentView(layoutResID, titleID, -1, mode, btnID);
+    }
+
+    public void setContentView(int layoutResID, int titleID, int menuId, int mode, int btnID) {
+        super.setContentView(layoutResID);
+        setUpToolbar(titleID, -1, mode, btnID);
+    }
+
+    private void setUpToolbar(int titleID, int menuID, int mode, int btnID) {
+        if (mode != MODE_NONE) {
+
+            texTitle = (TextView) findViewById(R.id.title);
+            setUpTitle(titleID);
+
+            if (mode != MODE_HOME) {
+
+                switch (mode) {
+                    case MODE_BACK:
+                        setUpBack();
+                        break;
+                    case MODE_BACK_ADD:
+                        setUpBack();
+                        setUpAdd(btnID);
+                        break;
+                    case MODE_ADD:
+                        setUpAdd(btnID);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    private void setUpAdd(int btnID) {
+        iBtnAdd = (ImageView) findViewById(R.id.ibt_add);
+        iBtnAdd.setImageResource(btnID);
+        iBtnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doAdd();
+            }
+        });
+    }
+
+    protected abstract void doAdd();
+
+    private void setUpBack() {
+        iBtnBack = (ImageButton) findViewById(R.id.ibt_back);
+        iBtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackClicked();
+            }
+        });
+    }
+
+    private void onBackClicked() {
+        finish();
+    }
+
+    private void setUpTitle(int titleID) {
+        if (titleID > 0 && texTitle != null) {
+            texTitle.setText(titleID);
+        }
     }
 
     /**
      * 设置布局的id
      * @return
      */
-    public abstract int getContentViewId();
+    public abstract int setUpContentView();
+
+    /**
+     *
+     */
+    public abstract void setUpView();
 
     /**
      *
      * @param savedInstanceState
      */
-    protected abstract void initAllMembersView(Bundle savedInstanceState);
+    protected abstract void setUpData(Bundle savedInstanceState);
 
     @Override
     protected void onDestroy() {
-        callCancel();
-        onUnsubscribe();
         EventBus.getDefault().unregister(BaseActivity.this);
         ButterKnife.unbind(this);
         super.onDestroy();
-    }
-
-    public void addCalls(Call call) {
-        if (calls == null) {
-            calls = new ArrayList<>();
-        }
-        calls.add(call);
-    }
-
-    private void callCancel() {
-        //LogUtil.d("callCancel");
-        if (calls.size() > 0) {
-            for (Call call : calls) {
-                if (!call.isCanceled())
-                    call.cancel();
-            }
-            calls.clear();
-        }
-    }
-
-    public void addSubscription(Observable observable, Subscriber subscriber) {
-        if (mCompositeSubscription == null) {
-            mCompositeSubscription = new CompositeSubscription();
-        }
-        mCompositeSubscription.add(observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber));
-    }
-
-    public void addSubscription(Subscription subscription) {
-        if (mCompositeSubscription == null) {
-            mCompositeSubscription = new CompositeSubscription();
-        }
-        mCompositeSubscription.add(subscription);
-    }
-
-    public void onUnsubscribe() {
-        //LogUtil.d("onUnsubscribe");
-        //取消注册，以避免内存泄露
-        if (mCompositeSubscription != null && mCompositeSubscription.hasSubscriptions())
-            mCompositeSubscription.unsubscribe();
     }
 
     public void toastShow(int resId) {

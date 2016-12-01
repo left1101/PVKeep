@@ -14,9 +14,10 @@ import rx.Observable;
  * Created by Xiexr
  */
 public interface ApiStores {
-    //baseUrl
-    String API_SERVER_URL = "http://182.18.19.152:8089/mobile/";
 
-    @POST("login")
+    //baseUrl
+    String API_SERVER_URL = "http://182.18.19.152:8089/mobile";
+
+    @POST("/login")
     Observable<UserVo> login(@QueryMap Map<String, String> map);
 }

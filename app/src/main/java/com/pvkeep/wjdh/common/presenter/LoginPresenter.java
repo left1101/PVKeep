@@ -18,7 +18,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements LoadData
     public LoginPresenter(LoginView view){
         attachView(view);
         model = new LoginModel(this);
-        model.attath(this);
+//        model.attath(this);
     }
 
     public void login(){

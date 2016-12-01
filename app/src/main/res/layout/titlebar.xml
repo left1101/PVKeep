@@ -3,15 +3,16 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@color/white"
-    android:layout_height="40dp">
+    android:layout_height="48dp">
 
     <TextView
         android:id="@+id/tex_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="首页"
+        android:text="标题"
+        android:gravity="center"
         android:textColor="@color/head_color"
         android:textSize="@dimen/title_size" />
 
@@ -22,7 +23,7 @@
         android:visibility="gone"/>
 
     <ImageButton
-        android:id="@+id/ibt_search"
+        android:id="@+id/ibt_add"
         style="@style/style_info_search"
         android:src="@mipmap/legal_information_btn_search_for"
         android:visibility="gone"/>

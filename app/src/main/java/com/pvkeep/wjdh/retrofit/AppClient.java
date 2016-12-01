@@ -19,6 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Xiexr
  */
 public class AppClient {
+
     public static Retrofit mRetrofit;
 
     public static Retrofit retrofit() {

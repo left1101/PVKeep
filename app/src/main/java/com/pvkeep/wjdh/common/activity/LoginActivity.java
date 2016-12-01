@@ -36,7 +36,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements LoginV
     }
 
     @Override
-    protected void initAllMembersView(Bundle savedInstanceState) {
+    protected void setUpData(Bundle savedInstanceState) {
         mvpPresenter.attachView(this);
     }
 

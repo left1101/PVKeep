@@ -22,7 +22,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class BaseFragment extends Fragment {
 
-    protected Context context;
+    protected Context mActivity;
     protected View mRootView;
     private CompositeSubscription mCompositeSubscription;
 
@@ -30,9 +30,9 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = inflater.inflate(getContentViewId(), container, false);
-        ButterKnife.bind(this, mRootView);
-        this.context = getActivity();
+        this.mActivity = getActivity();
         EventBus.getDefault().register(BaseFragment.this);
+        ButterKnife.bind(mRootView);
         initAllMembersView(savedInstanceState);
         return mRootView;
     }
@@ -44,19 +44,19 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);//解绑
+        ButterKnife.unbind(mRootView);//解绑
     }
 
     public void toastShow(int resId) {
-        Toast.makeText(context, resId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, resId, Toast.LENGTH_SHORT).show();
     }
 
     public void toastShow(String resId) {
-        Toast.makeText(context, resId, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, resId, Toast.LENGTH_SHORT).show();
     }
 
     public void mLog(String log){
-        Mlog.i(context.getClass().toString(), log);
+        Mlog.i(mActivity.getClass().toString(), log);
     }
 
     @Override
